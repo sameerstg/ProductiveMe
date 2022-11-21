@@ -11,11 +11,15 @@ public class MoneyManager : MonoBehaviour, IData
 
     [SerializeField] MoneyManagerData moneyManagerData;
     [SerializeField]TransactionType activeTransactionType;
+    [SerializeField] Transaction activeTransaction = new Transaction();
     List<InputGetter> inputs = new();
-    public string amount, note, description;
     public enum TransactionType
     {
         Income,Expence,Transfer
+    }
+    public enum InputType
+    {
+        amount,note,description
     }
     private void Awake()
     {
@@ -25,16 +29,9 @@ public class MoneyManager : MonoBehaviour, IData
     private void Start()
     {
         saveManager = SaveManager._instance;
-        foreach (var item in inputs)
+        for (int i = 0; i < Enum.GetValues(typeof(InputType)).Length; i++)
         {
-            if (item.gameObject.name == "amount") {
-                amount = item.inputField.text;
-            }else if (item.gameObject.name == "note") {
-                note = item.inputField.text;
-            }else if (item.gameObject.name == "description") {
-                description = item.inputField.text;
-            }
-            
+            inputs[i].inputType = (InputType)(i);
         }
     }
     public void LoadData()
@@ -57,6 +54,19 @@ public class MoneyManager : MonoBehaviour, IData
     {
         activeTransactionType = Enum.Parse<TransactionType>(transType);
     }
+    public void SetInputDataToActiveTransaction(InputType inputType,string data)
+    {
+        if (inputType==InputType.amount)
+        {
+            activeTransaction.amount = int.Parse(data);
+        }else if (inputType==InputType.description)
+        {
+            activeTransaction.description = data;
+        }else if (inputType==InputType.note)
+        {
+            activeTransaction.note = data;
+        }
+    }
 }
 [System.Serializable]
 public class MoneyManagerData
@@ -70,16 +80,17 @@ public class Account
     [SerializeField] float balance;
     [SerializeField] internal List<Transaction> transactions = new List<Transaction>();
 }
+[System.Serializable]
 public class Transaction
 {
-    [SerializeField]MoneyManager.TransactionType transactionType;
-    [SerializeField]Account senderAccount;
-    [SerializeField]Account receiverAccount;
-    [SerializeField]DateTime dateTime;
-    [SerializeField]Category category;
-    [SerializeField]float amount;
-    [SerializeField]string note;
-    [SerializeField] string description;
+    [SerializeField]public MoneyManager.TransactionType transactionType;
+    [SerializeField]public Account senderAccount;
+    [SerializeField]public Account receiverAccount;
+    [SerializeField]public DateTime dateTime;
+    [SerializeField]public Category category;
+    [SerializeField]public float amount;
+    [SerializeField]public string note;
+    [SerializeField]public  string description;
 
 }
 public class Expense:Transaction
