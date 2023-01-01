@@ -1,4 +1,5 @@
 using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,27 +8,37 @@ using UnityEngine;
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager _instance;
-    public enum Managers
-    {
-        MoneyManager
-    }
+   
     private void Awake()
     {
         _instance = this;
     }
-    public void SaveFile(Managers manager, Object obj)
+    public void SaveFile(Managers manager, object obj)
     {
         string jsonConverted = JsonConvert.SerializeObject(obj);
-        File.WriteAllText(Application.persistentDataPath + "\\" + manager + ".json", jsonConverted);
+        Debug.Log(jsonConverted);
+        File.WriteAllText(Application.persistentDataPath + "\\" + manager+".json", jsonConverted);
     }
-    public object LoadFile(Managers manager)
+     public void SaveFile(Managers manager, string obj)
     {
+        string jsonConverted = JsonUtility.ToJson(obj);
+        Debug.Log(jsonConverted);
+        File.WriteAllText(Application.persistentDataPath + "\\" + manager+".json", obj);
+    }
+
+    public T LoadFile<T>(Managers manager)
+    {
+        string fileContents = "";
         if (File.Exists(Application.persistentDataPath + "\\" + manager + ".json"))
         {
-            string fileContents = File.ReadAllText(Application.persistentDataPath + "\\" + manager+ ".json");
-            object objData = JsonConvert.DeserializeObject<object>(fileContents);
-            return objData;
+            fileContents = File.ReadAllText(Application.persistentDataPath + "\\" + manager+ ".json");
+
+           
         }
-        return null;
+        return JsonUtility.FromJson<T>(fileContents); 
     }
+}
+ public enum Managers
+{
+    MoneyManager,DiaryManager
 }

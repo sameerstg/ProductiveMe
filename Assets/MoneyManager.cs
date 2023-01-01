@@ -38,7 +38,7 @@ public class MoneyManager : MonoBehaviour, IData
     {
         try
         {
-            moneyManagerData = (MoneyManagerData)saveManager.LoadFile(SaveManager.Managers.MoneyManager);
+            //moneyManagerData = (MoneyManagerData)saveManager.LoadFile(Managers.MoneyManager);
         }
         catch (Exception)
         {
