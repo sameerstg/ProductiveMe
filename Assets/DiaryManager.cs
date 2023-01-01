@@ -13,6 +13,25 @@ public class DiaryManager : MonoBehaviour,IData
     private void Awake()
     {
         diaryManagerui  = GetComponent<DiaryManagerUi>();    
+    
+    }
+    private void Start()
+    {
+        LoadData();
+    }
+    public void SaveDiary()
+    {
+        
+        diaryData.Add(new DiaryData(diaryManagerui.dateTimeSetter.dateTime, diaryManagerui.title.text, diaryManagerui.diaryContent.text));
+        SaveData();
+        diaryManagerui.writingPanel.SetActive(false);
+        diaryManagerui.diaryListParrent.SetActive(true);
+        diaryManagerui.SetDiarySlotPanel(diaryData);
+    }
+    [Button]
+    public void SaveData()
+    {
+        GameManager._instance.saveManager.SaveFile(Managers.DiaryManager, diaryData);
     }
     [Button]
     public void LoadData()
@@ -20,11 +39,7 @@ public class DiaryManager : MonoBehaviour,IData
         diaryData = GameManager._instance.saveManager.LoadFile<List<DiaryData>>(Managers.DiaryManager);
            
     }
-    [Button]
-    public void SaveData()
-    {
-        GameManager._instance.saveManager.SaveFile(Managers.DiaryManager,currentDiarydate);
-    }
+    
 
    
 }
@@ -32,7 +47,17 @@ public class DiaryManager : MonoBehaviour,IData
 public class DiaryData
 {
     public DateTime dateTime;
-    public string title, diartContent;
+    public string title, diaryContent;
+   
+    public DiaryData(DateTime dateTime, string title, string diaryContent)
+
+    {
+        this.dateTime = dateTime;
+        this.title = title;
+        this.diaryContent =
+        diaryContent;
+    }
+
     void SetCalender()
     {
         

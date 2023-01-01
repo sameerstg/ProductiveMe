@@ -5,7 +5,7 @@ using UnityEngine;
 public class CalendarManager : MonoBehaviour
 {
 	#region Fields
-
+	public DateTime dateTime;
 	[SerializeField]
 	private HeaderManager headerManager;
 
@@ -17,7 +17,7 @@ public class CalendarManager : MonoBehaviour
 
 	private DateTime targetDateTime;
 	private CultureInfo cultureInfo;
-
+	public DateTimeSetter dateTimeSetter;
 	#endregion
 
 	#region Public Methods
@@ -28,11 +28,14 @@ public class CalendarManager : MonoBehaviour
 		Refresh(targetDateTime.Year, targetDateTime.Month);
 	}
 
-	#endregion
+    #endregion
 
-	#region Private Methods
-
-	private void Start()
+    #region Private Methods
+    private void Awake()
+    {
+		dateTimeSetter = GetComponentInParent<DateTimeSetter>();
+    }
+    private void Start()
 	{
 		targetDateTime = DateTime.Now;
 		cultureInfo = new CultureInfo("en-US");
@@ -47,11 +50,18 @@ public class CalendarManager : MonoBehaviour
 	{
 		headerManager.SetTitle($"{year} {cultureInfo.DateTimeFormat.GetMonthName(month)}");
 		bodyManager.Initialize(year, month, OnButtonClicked);
+		targetDateTime = new DateTime(year, month,1);
 	}
 
 	private void OnButtonClicked((string day, string legend) param)
 	{
 		tailManager.SetLegend($"You have clicked day {param.day}.");
+		dateTime = new DateTime(targetDateTime.Year,targetDateTime.Month,int.Parse(param.day));
+		
+		
+			
+		dateTimeSetter.SetDate(dateTime);
+		gameObject.SetActive(false);
 	}
 
 	#endregion
