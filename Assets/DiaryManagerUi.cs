@@ -2,33 +2,52 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
+using UnityEngine.UI;
+
 public class DiaryManagerUi : MonoBehaviour
 {
-    internal DateTimeSetter dateTimeSetter;
-    public TMP_InputField title, diaryContent;
-    public GameObject writingPanel;
-    public GameObject diaryListParrent;
-    public GameObject diarySlotPanel;
-    public GameObject slotPrefab;
-    public List<GameObject> slots = new List<GameObject>();    
-
-    void Start()
+    public static DiaryManagerUi _instance;
+    public DiaryHomeScreen diaryHomeScreen;
+    public DiaryWritingUi writingPanel;
+    public DiaryViewMode diaryViewMode;
+    public DiaryListUi diaryListUi;
+    public DiaryManager diaryManager;
+    private void Awake()
     {
-        dateTimeSetter = GetComponentInChildren<DateTimeSetter>();
-        writingPanel = dateTimeSetter.transform.parent.gameObject;                       
+        _instance   = this;
+        diaryManager = GetComponent<DiaryManager>();
     }
-    internal void  SetDiarySlotPanel(List<DiaryData> diaryData)
+    public void EnableDiaryWritingMode()
     {
-        foreach (var item in slots)
-        {
-            Destroy(item.gameObject);
+        
+        diaryHomeScreen.gameObject.SetActive(false);
+        writingPanel.title.text = "";
+        writingPanel.diaryContent.text = "";
 
-        }
-        slots.Clear();
-        foreach (var item in diaryData)
-        {
-            GameObject slot = Instantiate(slotPrefab, diarySlotPanel.transform);
-            slot.GetComponentInChildren<TextMeshProUGUI>().text = item.title.ToString();
-        }
+        writingPanel.gameObject.SetActive(true);
     }
-   }
+    public void EnableDiaryListUi()
+    {
+        diaryHomeScreen.gameObject.SetActive(false);
+        diaryListUi.gameObject.SetActive(true);
+        diaryListUi.SetDiarySlotPanel(diaryManager.diaryData);        
+    }
+    public void EnableDiaryViewMode(int index)
+    {
+        diaryListUi.gameObject.SetActive(false);
+        diaryViewMode.gameObject.SetActive(true);
+        diaryViewMode.SetViewMode(diaryManager.diaryData[index]);
+    }
+    public void EnableHomeScreen()
+    {
+        DisableAllScreen();
+        diaryHomeScreen.gameObject.SetActive(true);
+    }
+    public void DisableAllScreen()
+    {
+        writingPanel.gameObject.SetActive(false);
+      diaryViewMode.gameObject.SetActive(false);
+      diaryListUi.gameObject.SetActive(false);
+    }
+}

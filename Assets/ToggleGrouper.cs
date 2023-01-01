@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class ToggleGrouper : MonoBehaviour
 {
-    public Color pressedColor, deselectColor;
+/*    public Color pressedColor, deselectColor;
     public List<Button> buttons = new();
     public List<Image> images = new();
     void Awake()
@@ -34,6 +34,6 @@ public class ToggleGrouper : MonoBehaviour
         obj.color = pressedColor;
         MoneyManager._instance.SetTransactionType(obj.gameObject.name);
     }
-    
+*/    
     
 }

@@ -13,20 +13,19 @@ public class DiaryManager : MonoBehaviour,IData
     private void Awake()
     {
         diaryManagerui  = GetComponent<DiaryManagerUi>();    
-    
-    }
-    private void Start()
-    {
-        LoadData();
     }
     public void SaveDiary()
     {
-        
-        diaryData.Add(new DiaryData(diaryManagerui.dateTimeSetter.dateTime, diaryManagerui.title.text, diaryManagerui.diaryContent.text));
+        diaryManagerui.writingPanel.gameObject.SetActive(false);
+
+        diaryData.Add(new DiaryData(diaryManagerui.writingPanel.dateTimeSetter.dateTime, diaryManagerui.writingPanel.title.text, diaryManagerui.writingPanel.diaryContent.text));
         SaveData();
-        diaryManagerui.writingPanel.SetActive(false);
-        diaryManagerui.diaryListParrent.SetActive(true);
-        diaryManagerui.SetDiarySlotPanel(diaryData);
+        diaryManagerui.EnableDiaryListUi();
+    }
+
+    private void Start()
+    {
+        LoadData();
     }
     [Button]
     public void SaveData()

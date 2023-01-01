@@ -3,69 +3,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using NaughtyAttributes;
 
 public class MoneyManager : MonoBehaviour, IData
 {
     public static MoneyManager _instance;
-    SaveManager saveManager;
+   
 
-    [SerializeField] MoneyManagerData moneyManagerData;
-    [SerializeField]TransactionType activeTransactionType;
-    [SerializeField] Transaction activeTransaction = new Transaction();
-    List<InputGetter> inputs = new();
-    public enum TransactionType
-    {
-        Income,Expence,Transfer
-    }
-    public enum InputType
-    {
-        amount,note,description
-    }
+    MoneyManagerData moneyManagerData;
     private void Awake()
     {
         _instance = this;
-        inputs = GetComponentsInChildren<InputGetter>().ToList();
     }
-    private void Start()
-    {
-        saveManager = SaveManager._instance;
-        for (int i = 0; i < Enum.GetValues(typeof(InputType)).Length; i++)
-        {
-            inputs[i].inputType = (InputType)(i);
-        }
-    }
-    public void LoadData()
-    {
-        try
-        {
-            //moneyManagerData = (MoneyManagerData)saveManager.LoadFile(Managers.MoneyManager);
-        }
-        catch (Exception)
-        {
-            
-        }
-    }
-
+    [Button]
     public void SaveData()
     {
-        
+        GameManager._instance.saveManager.SaveFile(Managers.MoneyManager, moneyManagerData);
     }
-    public void SetTransactionType(string transType)
+    [Button]
+    public void LoadData()
     {
-        activeTransactionType = Enum.Parse<TransactionType>(transType);
-    }
-    public void SetInputDataToActiveTransaction(InputType inputType,string data)
-    {
-        if (inputType==InputType.amount)
-        {
-            activeTransaction.amount = int.Parse(data);
-        }else if (inputType==InputType.description)
-        {
-            activeTransaction.description = data;
-        }else if (inputType==InputType.note)
-        {
-            activeTransaction.note = data;
-        }
+        moneyManagerData = GameManager._instance.saveManager.LoadFile<MoneyManagerData>(Managers.MoneyManager);
+
     }
 }
 [System.Serializable]
@@ -79,11 +38,11 @@ public class Account
     [SerializeField] string name;
     [SerializeField] float balance;
     [SerializeField] internal List<Transaction> transactions = new List<Transaction>();
+    
 }
 [System.Serializable]
 public class Transaction
 {
-    [SerializeField]public MoneyManager.TransactionType transactionType;
     [SerializeField]public Account senderAccount;
     [SerializeField]public Account receiverAccount;
     [SerializeField]public DateTime dateTime;
@@ -92,20 +51,55 @@ public class Transaction
     [SerializeField]public string note;
     [SerializeField]public  string description;
 
+    
 }
 public class Expense:Transaction
 {
-
+    internal const TransactionType transactionType = TransactionType.Expence;
+    public Expense(Account expenseAccount, DateTime dateTime, Category category, float amount, string note)
+    {
+        this.senderAccount = expenseAccount;
+        this.dateTime = dateTime;
+        this.category = category;
+        this.amount = amount;
+        this.note = note;
+    }
 }
 public class Income:Transaction
 {
-
+    internal const TransactionType transactionType = TransactionType.Income;
+    public Income( Account receiverAccount, DateTime dateTime, Category category, float amount, string note)
+    {
+        this.receiverAccount = receiverAccount;
+        this.dateTime = dateTime;
+        this.category = category;
+        this.amount = amount;
+        this.note = note;
+    }
 }
 public class Transfer:Transaction
 {
+    internal const TransactionType transactionType = TransactionType.Transfer;
+    public Transfer(Account senderAccount, Account receiverAccount, DateTime dateTime, Category category, float amount, string note)
+    {
+        this.senderAccount = senderAccount;
+        this.receiverAccount = receiverAccount;
+        this.dateTime = dateTime;
+        this.category = category;
+        this.amount = amount;
+        this.note = note;
+    }
 
 }
 public class Category
 {
-    string categoryName;
+    internal string categoryName;
+}
+public enum TransactionType
+{
+    Income, Expence, Transfer
+}
+public enum InputType
+{
+    amount, note, description
 }

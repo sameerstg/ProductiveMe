@@ -8,7 +8,7 @@ using TMPro;
 
 public class InputGetter : MonoBehaviour
 {
-    public TMP_InputField inputField;
+/*    public TMP_InputField inputField;
     public MoneyManager.InputType inputType;
     private void Awake()
     {
@@ -19,4 +19,4 @@ public class InputGetter : MonoBehaviour
     {
         MoneyManager._instance.SetInputDataToActiveTransaction(inputType, value);
     }
-}
+*/}
