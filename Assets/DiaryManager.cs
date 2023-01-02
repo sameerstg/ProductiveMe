@@ -23,6 +23,11 @@ public class DiaryManager : MonoBehaviour,IData
         diaryManagerui.EnableDiaryListUi();
     }
 
+    public void DeleteDiary(DiaryData diaryData)
+    {
+        this.diaryData.Remove(diaryData);
+        SaveData();
+    }
     private void Start()
     {
         LoadData();

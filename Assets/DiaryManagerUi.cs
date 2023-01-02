@@ -27,9 +27,19 @@ public class DiaryManagerUi : MonoBehaviour
 
         writingPanel.gameObject.SetActive(true);
     }
+    public void EnableDiaryWritingMode(DiaryData diaryData)
+    {
+        
+        diaryHomeScreen.gameObject.SetActive(false);
+        writingPanel.title.text = diaryData.title;
+        writingPanel.diaryContent.text = diaryData.diaryContent;
+
+        writingPanel.gameObject.SetActive(true);
+    }
+
     public void EnableDiaryListUi()
     {
-        diaryHomeScreen.gameObject.SetActive(false);
+        DisableAllScreen();
         diaryListUi.gameObject.SetActive(true);
         diaryListUi.SetDiarySlotPanel(diaryManager.diaryData);        
     }
@@ -49,5 +59,20 @@ public class DiaryManagerUi : MonoBehaviour
         writingPanel.gameObject.SetActive(false);
       diaryViewMode.gameObject.SetActive(false);
       diaryListUi.gameObject.SetActive(false);
+    }
+    public void EditDiary()
+    {
+        DiaryData diaryToBeEdited = diaryViewMode.currentlyViewingDiary;
+        DisableAllScreen();
+        EnableDiaryWritingMode(diaryToBeEdited);
+    }
+    public void DeleteDiary()
+    {
+
+         DiaryData diaryToBeEdited = diaryViewMode.currentlyViewingDiary;
+        DisableAllScreen();
+
+        diaryManager.DeleteDiary(diaryToBeEdited);
+        EnableDiaryListUi();
     }
 }
