@@ -34,7 +34,7 @@ public class SaveManager : MonoBehaviour
 
            
         }
-        return JsonConvert.DeserializeObject<T>(fileContents); 
+        return JsonUtility.FromJson<T>(fileContents); 
     }
 }
  public enum Managers

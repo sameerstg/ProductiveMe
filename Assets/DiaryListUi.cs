@@ -9,7 +9,8 @@ public class DiaryListUi : MonoBehaviour
     public GameObject diaryListParrent;
     public GameObject diarySlotPanel;
     public GameObject slotPrefab;
-    public List<GameObject> slots = new List<GameObject>();
+    public List<GameObject> slots;
+    
     internal void SetDiarySlotPanel(List<DiaryData> diaryData)
     {
         gameObject.SetActive(true);
@@ -27,6 +28,7 @@ public class DiaryListUi : MonoBehaviour
             slot.GetComponentInChildren<TextMeshProUGUI>().text = item.title.ToString();
             slot.name = diaryData.IndexOf(item).ToString();
             slot.GetComponent<Button>().onClick.AddListener(() => OpenDiary(int.Parse(slot.name)));
+            slots.Add(slot);
         }
     }
     public void OpenDiary(int index)

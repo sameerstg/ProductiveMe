@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class MoneyManagerCategoryPanel : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void SetCategories()
     {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    }    
 }
