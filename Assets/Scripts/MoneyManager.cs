@@ -8,12 +8,13 @@ using NaughtyAttributes;
 public class MoneyManager : MonoBehaviour, IData
 {
     public static MoneyManager _instance;
-   
+    public MoneyManagerUI moneyManagerUi;
 
-   public  MoneyManagerData moneyManagerData;
+    public  MoneyManagerData moneyManagerData;
     private void Awake()
     {
         _instance = this;
+        moneyManagerUi = GetComponent<MoneyManagerUI>();
     }
     private void Start()
     {
@@ -26,6 +27,11 @@ public class MoneyManager : MonoBehaviour, IData
         {
             item.CalculateBalance();
         }
+    }
+    public void AddTransaction(Transaction transaction)
+    {
+        moneyManagerData.AddTransaction(transaction);
+        SaveData();
     }
     [Button]
     public void SaveData()
@@ -111,7 +117,7 @@ public class Transaction
 }
 public class Expense:Transaction
 {
-       public Expense(Account expenseAccount, DateTime dateTime, Category category, float amount, string note)
+       public Expense(Account expenseAccount, DateTime dateTime, Category category, float amount, string note,string description)
     {
         transactionType = TransactionType.Expence;
 
@@ -119,11 +125,13 @@ public class Expense:Transaction
         this.dateTime = dateTime;
         this.amount = amount;
         this.note = note;
+        this.description = description;
+
     }
 }
 public class Income:Transaction
 {
-      public Income( Account receiverAccount, DateTime dateTime, Category category, float amount, string note)
+      public Income( Account receiverAccount, DateTime dateTime, Category category, float amount, string note, string description)
     {
 transactionType = TransactionType.Income;
 
@@ -131,12 +139,13 @@ transactionType = TransactionType.Income;
         this.dateTime = dateTime;
         this.amount = amount;
         this.note = note;
+        this.description = description;
     }
 }
 public class Transfer:Transaction
 {
 
-    public Transfer(Account senderAccount, Account receiverAccount, DateTime dateTime, Category category, float amount, string note)
+    public Transfer(Account senderAccount, Account receiverAccount, DateTime dateTime, Category category, float amount, string note, string description)
     {
 transactionType = TransactionType.Transfer;
         this.senderAccount = senderAccount;
@@ -145,6 +154,8 @@ transactionType = TransactionType.Transfer;
         this.category = category;
         this.amount = amount;
         this.note = note;
+        this.description = description;
+
     }
 
 }
