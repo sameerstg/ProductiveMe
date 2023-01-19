@@ -32,8 +32,8 @@ public class ToggleGrouper : MonoBehaviour
 
         }
         obj.color = pressedColor;
-        MoneyManager._instance.moneyManagerUi.selectedTransactionType =  Enum.Parse<TransactionType>(obj.gameObject.name);
-    }
+        MoneyManager._instance.moneyManagerUi.SetTransactionType(Enum.Parse<TransactionType>(obj.gameObject.name));
+            }
 
 
 }

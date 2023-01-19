@@ -33,7 +33,7 @@ public class CalendarManager : MonoBehaviour
     #region Private Methods
     private void Awake()
     {
-		dateTimeSetter = GetComponentInParent<DateTimeSetter>();
+		//dateTimeSetter = GetComponentInParent<DateTimeSetter>();
     }
     private void Start()
 	{

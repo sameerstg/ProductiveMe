@@ -73,8 +73,8 @@ public class MoneyManagerData
      public void AddTransaction(Transaction transaction)
     {
 
-        if(transaction.senderAccount!= null) { transaction.senderAccount.AddAndCalculateTransaction(transaction); }
-        if (transaction.receiverAccount != null) { transaction.receiverAccount.AddAndCalculateTransaction(transaction); }
+        if (transaction.receiverAccount != null) {Debug.Log("r"); transaction.receiverAccount.AddAndCalculateTransaction(transaction); }
+        if(transaction.senderAccount!= null) { Debug.Log("s"); transaction.senderAccount.AddAndCalculateTransaction(transaction); }
                 
         
     }
@@ -105,7 +105,7 @@ public class Account
             {
                 balance += item.amount;
             }
-            else if(item.transactionType == TransactionType.Expence)
+            else if(item.transactionType == TransactionType.Expense)
             {
                 balance-= item.amount;
             }
@@ -141,7 +141,7 @@ public class Expense:Transaction
 {
        public Expense(Account expenseAccount, DateTime dateTime, Category category, float amount, string note,string description)
     {
-        transactionType = TransactionType.Expence;
+        transactionType = TransactionType.Expense;
 
         this.senderAccount = expenseAccount;
         this.dateTime = dateTime;
@@ -194,7 +194,7 @@ public class Category
 }
 public enum TransactionType
 {
-    Income, Expence, Transfer
+    Income, Expense, Transfer
 }
 public enum InputType
 {
