@@ -12,8 +12,8 @@ public class MoneyManagerUI : MonoBehaviour
     public GameObject moneyTransactionPanel;
     public TransactionType selectedTransactionType;
     public Button account1Button, account2Button,categoryButton;
-    public Account selectedAccount;
-    public Account selectedAccount1;
+    internal Account selectedAccount;
+    internal Account selectedAccount1;
     public Category selectedCategory;
     public DateTimeSetter dateTimeSetter;
     public TMP_InputField amount, note, description;

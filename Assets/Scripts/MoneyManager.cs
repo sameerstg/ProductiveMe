@@ -12,8 +12,8 @@ public class MoneyManager : MonoBehaviour, IData
 
     
     public static Action OnDataUpdate;
-    
-    public  MoneyManagerData moneyManagerData;
+
+    internal MoneyManagerData moneyManagerData;
     private void Awake()
     {
         _instance = this;
