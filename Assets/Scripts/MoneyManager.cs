@@ -10,6 +10,9 @@ public class MoneyManager : MonoBehaviour, IData
     public static MoneyManager _instance;
     public MoneyManagerUI moneyManagerUi;
 
+    
+    public static Action OnDataUpdate;
+    
     public  MoneyManagerData moneyManagerData;
     private void Awake()
     {
@@ -31,17 +34,32 @@ public class MoneyManager : MonoBehaviour, IData
     public void AddTransaction(Transaction transaction)
     {
         moneyManagerData.AddTransaction(transaction);
+        print("pass");
         SaveData();
     }
     [Button]
     public void SaveData()
     {
         GameManager._instance.saveManager.SaveFile(Managers.MoneyManager, moneyManagerData);
+        if (OnDataUpdate != null)
+        {
+
+            OnDataUpdate();
+        }
     }
     [Button]
     public void LoadData()
     {
         moneyManagerData = GameManager._instance.saveManager.LoadFile<MoneyManagerData>(Managers.MoneyManager);
+        if (moneyManagerData == null)
+        {
+            moneyManagerData = new();
+        }
+        if (OnDataUpdate!=null)
+        {
+
+            OnDataUpdate();
+        }
 
     }
 }
@@ -54,9 +72,10 @@ public class MoneyManagerData
     
      public void AddTransaction(Transaction transaction)
     {
-        
+
         if(transaction.senderAccount!= null) { transaction.senderAccount.AddAndCalculateTransaction(transaction); }
         if (transaction.receiverAccount != null) { transaction.receiverAccount.AddAndCalculateTransaction(transaction); }
+                
         
     }
 
@@ -67,7 +86,10 @@ public class Account
     public string name;
     public float balance;
      public  List<Transaction> transactions = new List<Transaction>();
-   
+  public Account(string name)
+    {
+        this.name = name;
+    }
     public void AddAndCalculateTransaction(Transaction transaction)
     {
            transactions.Add(transaction);
@@ -159,9 +181,16 @@ transactionType = TransactionType.Transfer;
     }
 
 }
+[System.Serializable]
 public class Category
 {
-    internal string categoryName;
+
+    public string categoryName;
+
+    public Category(string categoryName)
+    {
+        this.categoryName = categoryName;
+    }
 }
 public enum TransactionType
 {

@@ -15,7 +15,7 @@ public class SaveManager : MonoBehaviour
     }
     public void SaveFile(Managers manager, object obj)
     {
-        string jsonConverted = JsonConvert.SerializeObject(obj);
+        string jsonConverted = JsonUtility.ToJson(obj);
         File.WriteAllText(Application.persistentDataPath + "\\" + manager+".json", jsonConverted);
     }
      public void SaveFile(Managers manager, string obj)

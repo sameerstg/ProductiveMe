@@ -12,5 +12,6 @@ public class DiaryViewMode : MonoBehaviour
         currentlyViewingDiary = diaryData;
         title.text = diaryData.title;
         content.text = diaryData.diaryContent;
+        
     }
 }
