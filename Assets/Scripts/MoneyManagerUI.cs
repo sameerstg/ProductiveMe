@@ -70,6 +70,11 @@ public class MoneyManagerUI : MonoBehaviour
             account1Button.GetComponentInChildren<TextMeshProUGUI>().text = "Sender Account : "+item.name;
 
         }
+        else
+        {
+            account1Button.GetComponentInChildren<TextMeshProUGUI>().text = "Sender Account : " + item.name;
+
+        }
         selectedAccount = item; 
     }
 

@@ -13,7 +13,7 @@ public class MoneyManager : MonoBehaviour, IData
     
     public static Action OnDataUpdate;
 
-    internal MoneyManagerData moneyManagerData;
+    public MoneyManagerData moneyManagerData;
     private void Awake()
     {
         _instance = this;
@@ -69,12 +69,22 @@ public class MoneyManagerData
     public List<Account> accounts = new List<Account>();
     public List<Category> category = new();
 
-    
+   public MoneyManagerData()
+    {
+        accounts.Add(new("Cash"));
+        category.Add(new("Food"));
+        category.Add(new("Charity"));
+        category.Add(new("Transportaion"));
+        category.Add(new("Aparrel"));
+        category.Add(new("Lend"));
+        category.Add(new("Education"));
+        category.Add(new("Other"));
+    }
      public void AddTransaction(Transaction transaction)
     {
 
-        if (transaction.receiverAccount != null) {Debug.Log("r"); transaction.receiverAccount.AddAndCalculateTransaction(transaction); }
-        if(transaction.senderAccount!= null) { Debug.Log("s"); transaction.senderAccount.AddAndCalculateTransaction(transaction); }
+        if (transaction.receiverAccount != null) {transaction.receiverAccount.AddAndCalculateTransaction(transaction); }
+        if(transaction.senderAccount!= null) {  transaction.senderAccount.AddAndCalculateTransaction(transaction); }
                 
         
     }

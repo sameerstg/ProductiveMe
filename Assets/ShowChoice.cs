@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngineInternal;
 
 public class ShowChoice : MonoBehaviour
 {
@@ -20,20 +21,24 @@ public class ShowChoice : MonoBehaviour
     }
     void SetAddPanel(string type)
     {
+        Debug.Log(type);
         addPanel.SetActive(false);
         if (type.Contains("Account"))
         {
-                       SetForAddAccount(addText.text); 
+              SetForAddAccount(addText.text); 
         }
         else
         {
             
-            SetForAddCategory(addText.text);         }
+            SetForAddCategory(addText.text);        
+        }
+        Show(type);
     }
     public void Show(string type)
     {
         gameObject.SetActive(true);
         Destroyall();
+        actionAddButton.onClick.RemoveAllListeners();
         actionAddButton.onClick.AddListener(() => {
             SetAddPanel(type);
         });
@@ -61,7 +66,7 @@ public class ShowChoice : MonoBehaviour
                 addText.GetComponentInChildren<TextMeshProUGUI>().text = "Enter Account";
                        foreach (var item in MoneyManager._instance.moneyManagerData.accounts)
             {
-                if (item != MoneyManager._instance.moneyManagerUi.selectedAccount1)
+                if (item != MoneyManager._instance.moneyManagerUi.selectedAccount)
                 {
 
                     var obj = Instantiate(slot, content.transform);
@@ -103,6 +108,7 @@ public class ShowChoice : MonoBehaviour
             }
         }
         MoneyManager._instance.moneyManagerData.accounts.Add(new Account(name));
+        MoneyManager._instance.SaveData();
 
     }  void SetForAddCategory(string name)
     {
@@ -118,10 +124,12 @@ public class ShowChoice : MonoBehaviour
             }
         }
         MoneyManager._instance.moneyManagerData.category.Add(new Category(name));
+        MoneyManager._instance.SaveData();
 
     }
     void Destroyall()
     {
+        print("d");
         if (slots.Count>0)
         {
             foreach (var item in slots)
