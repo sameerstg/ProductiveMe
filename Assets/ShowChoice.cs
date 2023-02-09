@@ -129,7 +129,6 @@ public class ShowChoice : MonoBehaviour
     }
     void Destroyall()
     {
-        print("d");
         if (slots.Count>0)
         {
             foreach (var item in slots)

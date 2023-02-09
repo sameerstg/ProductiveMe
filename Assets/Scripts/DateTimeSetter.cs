@@ -7,35 +7,38 @@ using System;
 
 public class DateTimeSetter : MonoBehaviour
 {
-
+    public static DateTimeSetter _instance;
     public List<Button> buttons = new();
     public List<TextMeshProUGUI> texts = new();
     public DateTime dateTime;
     public GameObject calenderGo;
-    public CalendarManager calendarManager;
-    public GameObject timeGo;
+    public CalenderManager calenderManager;
             
     private void Awake()
     {
-        calendarManager = calenderGo.GetComponent<CalendarManager>();
+        _instance = this;
         for (int i = 0; i < 2; i++)
         {
             buttons.Add(transform.GetChild(i).GetComponent<Button>());
             texts.Add(buttons[buttons.Count - 1].GetComponentInChildren<TextMeshProUGUI>());
         }
     }
-    internal void SetDate(DateTime date)
+    private void Update()
     {
-        dateTime = date;
-        texts[0].text = $"{dateTime.Day}/{dateTime.Month}/{dateTime.Year}";
-        texts[1].text = $"{dateTime.Hour}:{dateTime.Minute}";
-
+        texts[1].text = dateTime.TimeOfDay.ToString().Substring(0,5);
+    }
+    internal void SetDate()
+    {
+        dateTime = calenderManager.dateTime;
+        texts[0].text = calenderManager.dateTime.GetDateTimeFormats()[0];
+       
     }
     private void Start()
     {
-        SetDate(DateTime.Now); 
+        calenderManager.dateTime = DateTime.Now;
+        SetDate(); 
         buttons[0].onClick.AddListener(()=>calenderGo.SetActive(true));
-        buttons[1].onClick.AddListener(()=>timeGo.SetActive(true));
+        buttons[1].onClick.AddListener(() => { });
     }
 
 }

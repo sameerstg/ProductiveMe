@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using NaughtyAttributes;
+using Unity.VisualScripting;
 
 public class MoneyManager : MonoBehaviour, IData
 {
@@ -22,7 +23,7 @@ public class MoneyManager : MonoBehaviour, IData
     private void Start()
     {
         LoadData();
-    }
+            }
     [Button]
     void DebugBalance()
     {
@@ -83,8 +84,27 @@ public class MoneyManagerData
      public void AddTransaction(Transaction transaction)
     {
 
-        if (transaction.receiverAccount != null) {transaction.receiverAccount.AddAndCalculateTransaction(transaction); }
-        if(transaction.senderAccount!= null) {  transaction.senderAccount.AddAndCalculateTransaction(transaction); }
+        if (transaction.receiverAccount != null) {
+            foreach (var item in accounts)
+            {
+                if (item.name == transaction.receiverAccount)
+                {
+                    item.AddAndCalculateTransaction(transaction);
+                }
+            }
+        
+        }
+        if(transaction.senderAccount!= null) {  
+
+
+            foreach (var item in accounts)
+            {
+                if (item.name == transaction.senderAccount)
+                {
+                    item.AddAndCalculateTransaction(transaction);
+                }
+            }
+        }
                 
         
     }
@@ -121,7 +141,7 @@ public class Account
             }
             else
             {
-                if (item.senderAccount == this)
+                if (!item.senderAccount.IsUnityNull())
                 {
                     balance -= item.amount;
                 }
@@ -136,8 +156,8 @@ public class Account
 [System.Serializable]
 public class Transaction
 {
-    [SerializeField]public Account senderAccount;
-    [SerializeField]public Account receiverAccount;
+    [SerializeField]public string senderAccount;
+    [SerializeField]public string receiverAccount;
     [SerializeField]public DateTime dateTime;
         [SerializeField]public float amount;
     [SerializeField]public string note;
@@ -149,10 +169,11 @@ public class Transaction
 }
 public class Expense:Transaction
 {
-       public Expense(Account expenseAccount, DateTime dateTime, Category category, float amount, string note,string description)
+       public Expense(string expenseAccount, DateTime dateTime, Category category, float amount, string note,string description)
     {
         transactionType = TransactionType.Expense;
 
+        this.category = category;
         this.senderAccount = expenseAccount;
         this.dateTime = dateTime;
         this.amount = amount;
@@ -163,9 +184,10 @@ public class Expense:Transaction
 }
 public class Income:Transaction
 {
-      public Income( Account receiverAccount, DateTime dateTime, Category category, float amount, string note, string description)
+      public Income(string receiverAccount, DateTime dateTime, Category category, float amount, string note, string description)
     {
 transactionType = TransactionType.Income;
+        this.category = category;
 
         this.receiverAccount = receiverAccount;
         this.dateTime = dateTime;
@@ -177,7 +199,7 @@ transactionType = TransactionType.Income;
 public class Transfer:Transaction
 {
 
-    public Transfer(Account senderAccount, Account receiverAccount, DateTime dateTime, Category category, float amount, string note, string description)
+    public Transfer(string senderAccount, string receiverAccount, DateTime dateTime, Category category, float amount, string note, string description)
     {
 transactionType = TransactionType.Transfer;
         this.senderAccount = senderAccount;

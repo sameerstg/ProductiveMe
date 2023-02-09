@@ -8,10 +8,26 @@ using System;
 
 public class MoneyManagerUI : MonoBehaviour
 {
-    public static MoneyManagerUI _instance; 
+    public static MoneyManagerUI _instance;
+
+    public GameObject transactionPanel;
+    public GameObject menuPanel;
+    public TransactionHistoryUi transactionHistoryUi;
+
+         private void Awake()
+    {
+        _instance = this;
+        //dateTimeSetter = GetComponentInChildren<DateTimeSetter>();
+        addButton.onClick.AddListener(() => AddNewTransaction());
+        account1Button.onClick.AddListener(() => showChoice.Show("Account1"));
+        account2Button.onClick.AddListener(() => showChoice.Show("Account2"));
+        categoryButton.onClick.AddListener(() => showChoice.Show("Category"));
+        cancelButton.onClick.AddListener(() => RefereshUi());
+            }
+    #region Transaction Section Functionalities
     public GameObject moneyTransactionPanel;
     public TransactionType selectedTransactionType;
-    public Button account1Button, account2Button,categoryButton;
+    public Button account1Button, account2Button, categoryButton;
     internal Account selectedAccount;
     internal Account selectedAccount1;
     public Category selectedCategory;
@@ -19,24 +35,9 @@ public class MoneyManagerUI : MonoBehaviour
     public TMP_InputField amount, note, description;
     public Button addButton, cancelButton;
     public ShowChoice showChoice;
-
-         private void Awake()
+      public  void RefereshUi()
     {
-        _instance = this;
-        dateTimeSetter = GetComponentInChildren<DateTimeSetter>();
-        addButton.onClick.AddListener(() => AddNewTransaction());
-        account1Button.onClick.AddListener(() => showChoice.Show("Account1"));
-        account2Button.onClick.AddListener(() => showChoice.Show("Account2"));
-        categoryButton.onClick.AddListener(() => showChoice.Show("Category"));
-        cancelButton.onClick.AddListener(() => RefereshUi());
-    }
-    public void SetSelectedCategory(Category category)
-    {
-
-        selectedCategory = category;
-    }
-    void RefereshUi()
-    {
+        moneyTransactionPanel.SetActive(true);
         selectedAccount = null; selectedCategory = null; amount.text = null;note.text = null; description.text = null;
         if (selectedTransactionType == TransactionType.Income)
         {
@@ -95,20 +96,21 @@ public class MoneyManagerUI : MonoBehaviour
         {
             return;
         }
+        
         if (selectedTransactionType == TransactionType.Income)
         {
-            Transaction transaction = new Income(selectedAccount, dateTimeSetter.dateTime, selectedCategory, float.Parse(amount.text), note.text, description.text);
+            Transaction transaction = new Income(selectedAccount.name, dateTimeSetter.dateTime, selectedCategory, float.Parse(amount.text), note.text, description.text);
             MoneyManager._instance.AddTransaction(transaction);
 
         }
         else if (selectedTransactionType == TransactionType.Expense)
         {
-            Transaction transaction = new Expense(selectedAccount,dateTimeSetter.dateTime,selectedCategory,float.Parse(amount.text),note.text,description.text);
+            Transaction transaction = new Expense(selectedAccount.name, dateTimeSetter.dateTime,selectedCategory,float.Parse(amount.text),note.text,description.text);
             MoneyManager._instance.AddTransaction(transaction);
 
         }else if (selectedTransactionType == TransactionType.Transfer)
         {
-            Transaction transaction = new Transfer(selectedAccount,selectedAccount1,dateTimeSetter.dateTime,selectedCategory,float.Parse(amount.text),note.text,description.text);
+            Transaction transaction = new Transfer(selectedAccount.name, selectedAccount1.name,dateTimeSetter.dateTime,selectedCategory,float.Parse(amount.text),note.text,description.text);
             MoneyManager._instance.AddTransaction(transaction);
 
         }
@@ -131,5 +133,6 @@ public class MoneyManagerUI : MonoBehaviour
 
     }
 
-    
+    #endregion
+
 }

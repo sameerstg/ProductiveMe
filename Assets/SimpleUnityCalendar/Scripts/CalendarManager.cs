@@ -60,7 +60,6 @@ public class CalendarManager : MonoBehaviour
 		
 		
 			
-		dateTimeSetter.SetDate(dateTime);
 		gameObject.SetActive(false);
 	}
 
