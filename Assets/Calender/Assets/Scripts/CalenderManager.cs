@@ -44,7 +44,6 @@ public class CalenderManager : MonoBehaviour
         void SetCalender(DateTime dateTime)
     {
         DestroySlots();
-              monthText.text = dateTime.Month.ToString();
         Debug.Log(dateTime.Year);
         Debug.Log(dateTime.Day);
         Debug.Log(dateTime.DayOfWeek);

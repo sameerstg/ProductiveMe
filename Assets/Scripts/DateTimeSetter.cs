@@ -12,11 +12,12 @@ public class DateTimeSetter : MonoBehaviour
     public List<TextMeshProUGUI> texts = new();
     public DateTime dateTime;
     public GameObject calenderGo;
-    public CalenderManager calenderManager;
+    public CalendarManager calenderManager;
             
     private void Awake()
     {
         _instance = this;
+            
         for (int i = 0; i < 2; i++)
         {
             buttons.Add(transform.GetChild(i).GetComponent<Button>());

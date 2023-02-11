@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Transactions;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,18 +8,19 @@ public class TransactionHistoryUi : MonoBehaviour
 {
     public GameObject transactionSlot;
     public GameObject container;
-    public List<GameObject> transactionsList = new List<GameObject>(); 
+    public List<GameObject> transactionsList = new (); 
     
     public Button leftMonthButton,  rightMonthButton;
     public TextMeshProUGUI monthText;
     DateTime date;
     private void Start()
     {
-        leftMonthButton.onClick.AddListener(() => { date= date.AddMonths(-1); });
-        rightMonthButton.onClick.AddListener(() => { date= date.AddMonths(+1); });
+        leftMonthButton.onClick.AddListener(() => { date= date.AddMonths(-1); Referesh(); });
+        rightMonthButton.onClick.AddListener(() => { date= date.AddMonths(+1); Referesh(); });
     }
     public void Show()
     {
+        date = DateTime.Now;
         gameObject.SetActive(true);
         Referesh();
 
@@ -30,7 +28,7 @@ public class TransactionHistoryUi : MonoBehaviour
     }
     public void Referesh()
     {
-        date = DateTime.Now;
+
         SetDate();
         if (transactionsList.Count>0)
         {
@@ -43,19 +41,19 @@ public class TransactionHistoryUi : MonoBehaviour
         {
             foreach (var item in acc.transactions)
             {
-                if (date.Month != item.dateTime.Month)
+                if (date.Month != (item.dateTime).Month)
                 {
                     continue;
                 }
                 var trans = Instantiate(transactionSlot, container.transform);
                 if (item.transactionType == TransactionType.Expense)
                 {
-                    trans.GetComponent<SetTransactionSlot>().Set(item.category.categoryName, item.senderAccount, -item.amount);
+                    trans.GetComponent<SetTransactionSlot>().Set(item.category.categoryName, item.senderAccount, -item.amount,date.GetDateTimeFormats()[0]);
 
                 }
                 else if (item.transactionType == TransactionType.Income)
                 {
-                    trans.GetComponent<SetTransactionSlot>().Set(item.category.categoryName, item.receiverAccount, item.amount);
+                    trans.GetComponent<SetTransactionSlot>().Set(item.category.categoryName, item.receiverAccount, item.amount, date.GetDateTimeFormats()[0]);
 
                 }
                 transactionsList.Add(trans);
@@ -66,6 +64,9 @@ public class TransactionHistoryUi : MonoBehaviour
     }
     void SetDate()
     {
+        var d = date.GetDateTimeFormats();
+        var e = date.GetDateTimeFormats()[d.Length - 1];
 
+        monthText.text = e.Substring(0, e.IndexOf(" "));
     }
 }

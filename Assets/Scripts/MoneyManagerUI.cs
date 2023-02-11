@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine.UI;
-using System;
+using Newtonsoft.Json;
 
 public class MoneyManagerUI : MonoBehaviour
 {
@@ -17,13 +14,23 @@ public class MoneyManagerUI : MonoBehaviour
          private void Awake()
     {
         _instance = this;
-        //dateTimeSetter = GetComponentInChildren<DateTimeSetter>();
         addButton.onClick.AddListener(() => AddNewTransaction());
         account1Button.onClick.AddListener(() => showChoice.Show("Account1"));
         account2Button.onClick.AddListener(() => showChoice.Show("Account2"));
         categoryButton.onClick.AddListener(() => showChoice.Show("Category"));
         cancelButton.onClick.AddListener(() => RefereshUi());
             }
+    private void Start()
+    {
+        HideAllPanels();
+        transactionHistoryUi.Show();
+        
+    }
+    void HideAllPanels()
+    {
+        transactionPanel.SetActive(false);
+        transactionHistoryUi.gameObject.SetActive(false);
+    }
     #region Transaction Section Functionalities
     public GameObject moneyTransactionPanel;
     public TransactionType selectedTransactionType;
