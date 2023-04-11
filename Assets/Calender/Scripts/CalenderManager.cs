@@ -9,14 +9,15 @@ public class CalenderManager : MonoBehaviour
     public DateTime dateTime;
     public string date;
     // Body
-     public GameObject container;
-     public List<GameObject> slots = new();
-     public GameObject slot;
+    public GameObject container;
+    public List<GameObject> slots = new();
+    public GameObject slot;
     // Header
     public GameObject monthButton, yearButton;
-     TextMeshProUGUI monthText, yearText;
-     Button monthLeft, monthRight, yearLeft, yearRight;    
-       private void Start()
+    TextMeshProUGUI monthText, yearText;
+    Button monthLeft, monthRight, yearLeft, yearRight;
+    public TextMeshProUGUI textOnClick;
+    private void Start()
     {
         // Getting References
         monthText = monthButton.transform.GetChild(1).GetComponent<TextMeshProUGUI>();
@@ -37,38 +38,39 @@ public class CalenderManager : MonoBehaviour
 
         dateTime = DateTime.Now;
         SetCalender(dateTime);
-               
+
 
 
     }
     void SetCalender(DateTime dateTime)
     {
         DestroySlots();
-              monthText.text = dateTime.Month.ToString();
-        Debug.Log(dateTime.Year);
+        monthText.text = dateTime.Month.ToString();
+        /*Debug.Log(dateTime.Year);
         Debug.Log(dateTime.Day);
         Debug.Log(dateTime.DayOfWeek);
-        Debug.Log(dateTime.DayOfYear);
+        Debug.Log(dateTime.DayOfYear);*/
         var d = dateTime.GetDateTimeFormats();
-        var e = dateTime.GetDateTimeFormats()[d.Length-1];
+        var e = dateTime.GetDateTimeFormats()[d.Length - 1];
 
         monthText.text = e.Substring(0, e.IndexOf(" "));
 
 
         yearText.text = dateTime.Year.ToString();
-        for (int i = 0; i < DateTime.DaysInMonth(dateTime.Year,dateTime.Month); i++)
+        for (int i = 0; i < DateTime.DaysInMonth(dateTime.Year, dateTime.Month); i++)
         {
             var dateSlot = Instantiate(slot, container.transform);
-            dateSlot.GetComponentInChildren<TextMeshProUGUI>().text = (i+1).ToString();
+            dateSlot.GetComponentInChildren<TextMeshProUGUI>().text = (i + 1).ToString();
             var x = i;
             dateSlot.GetComponent<Button>().onClick.AddListener(() => SelectDate(x + 1));
             slots.Add(dateSlot);
         }
         date = dateTime.GetDateTimeFormats()[0];
+
     }
     void DestroySlots()
     {
-        if (slots.Count==0)
+        if (slots.Count == 0)
         {
             return;
         }
@@ -91,15 +93,17 @@ public class CalenderManager : MonoBehaviour
     }
     void SelectDate(int day)
     {
-        Debug.Log(day);
-        Debug.Log(dateTime);
+        /*Debug.Log(day);
+        Debug.Log(dateTime);*/
 
-        dateTime = dateTime.AddDays(-dateTime.Day+1);
-        Debug.Log(dateTime);
+        dateTime = dateTime.AddDays(-dateTime.Day + 1);
+        //Debug.Log(dateTime);
 
-        dateTime = dateTime.AddDays(day-1);
-        Debug.Log(dateTime);
-        date = dateTime.GetDateTimeFormats()[0];
+        dateTime = dateTime.AddDays(day - 1);
+        //Debug.Log(dateTime);
+        date = dateTime.Date.GetDateTimeFormats()[6];
 
+        gameObject.SetActive(false);
+        textOnClick.text = date;
     }
 }
