@@ -1,3 +1,4 @@
+using NaughtyAttributes;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -32,9 +33,49 @@ public class GameManager : MonoBehaviour
     public void StartMoneyManager()
     {
         moneyManager.StartMoneyManager();
+        
+
+       
+    }
+       public void QuickSort(int[] arr,int start,int end)
+    {
+
+        if (start >= end) return;
+        
+      
+            int pivot = Partition(arr, start, end);
+        QuickSort(arr, start, pivot - 1);
+        QuickSort(arr,  pivot + 1,end);
+    }
+
+
+    public int Partition(int[] arr, int start, int end)
+    {
+        int pivot = arr[end];
+        int i = start - 1;
+        int temp;
+            for (int j = start; j <= end-1; j++)
+            {
+                if (arr[j]<pivot)
+                {
+                    i++;
+                     temp = arr[j];
+                    arr[j] = arr[i];
+                    arr[i] = temp;
+
+                }
+            }
+        i++;
+         temp = arr[end];
+        arr[end] = arr[i];
+        arr[i] = temp;
+        return i;
 
     }
+
+
 }
+
 public  class ColorPalette
 {
     public static Color32 secondaryColor = new Color32(255, 255, 255, 255);

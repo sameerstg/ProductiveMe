@@ -64,9 +64,9 @@ public class TransactionPanelIncomeExpense : MonoBehaviour
     {
         if (string.IsNullOrEmpty(dateInp.text)) return;
 
-        if (string.IsNullOrEmpty( account1Inp.text)) return;
-        if (string.IsNullOrEmpty(categoryInp.text))return;
-        if (string.IsNullOrEmpty(amountInp.text)) return;
+        if ( account1Inp.text.ToString().Contains("Tap ")) return;
+        if (categoryInp.text.ToString().Contains("Tap "))return;
+        if (amountInp.text.ToString().Contains("Tap ")) return;
         if (MoneyManager._instance.transactionPanel.transactionTypeButtonPanel.transactionTypeSelected == TransactionType.income)
         {
             Income income = new Income(DateTime.ParseExact(dateInp.text, "dd-MMM-yy", CultureInfo.InvariantCulture), float.Parse(amountInp.text), account1Inp.text, noteInp.text, descriptionInp.text);

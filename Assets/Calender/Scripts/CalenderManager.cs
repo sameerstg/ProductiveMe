@@ -17,6 +17,8 @@ public class CalenderManager : MonoBehaviour
     TextMeshProUGUI monthText, yearText;
     Button monthLeft, monthRight, yearLeft, yearRight;
     public TextMeshProUGUI textOnClick;
+    public onDateChange OnDateChange;
+    public delegate void onDateChange();
     private void Start()
     {
         // Getting References
@@ -42,21 +44,30 @@ public class CalenderManager : MonoBehaviour
 
 
     }
-    void SetCalender(DateTime dateTime)
+    public void SetCalender(DateTime dateTime)
     {
         DestroySlots();
-        monthText.text = dateTime.Month.ToString();
-        /*Debug.Log(dateTime.Year);
-        Debug.Log(dateTime.Day);
-        Debug.Log(dateTime.DayOfWeek);
-        Debug.Log(dateTime.DayOfYear);*/
-        var d = dateTime.GetDateTimeFormats();
-        var e = dateTime.GetDateTimeFormats()[d.Length - 1];
+        try
+        {
+            monthText.text = dateTime.Month.ToString();
+            /*Debug.Log(dateTime.Year);
+            Debug.Log(dateTime.Day);
+            Debug.Log(dateTime.DayOfWeek);
+            Debug.Log(dateTime.DayOfYear);*/
+            var d = dateTime.GetDateTimeFormats();
+            var e = dateTime.GetDateTimeFormats()[d.Length - 1];
 
-        monthText.text = e.Substring(0, e.IndexOf(" "));
+            monthText.text = e.Substring(0, e.IndexOf(" "));
 
 
-        yearText.text = dateTime.Year.ToString();
+            yearText.text = dateTime.Year.ToString();
+        }
+        catch (Exception)
+        {
+
+            
+        }
+        
         for (int i = 0; i < DateTime.DaysInMonth(dateTime.Year, dateTime.Month); i++)
         {
             var dateSlot = Instantiate(slot, container.transform);
@@ -67,6 +78,7 @@ public class CalenderManager : MonoBehaviour
         }
         date = dateTime.GetDateTimeFormats()[0];
 
+        OnDateChange?.Invoke();
     }
     void DestroySlots()
     {

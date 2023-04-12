@@ -60,13 +60,11 @@ public class TransactionPanelTransfer : MonoBehaviour
     }
     private void SaveTransaction()
     {
-        if (string.IsNullOrEmpty(dateInp.text)) return;
-        if (string.IsNullOrEmpty(account1Inp.text)) return;
-        if (string.IsNullOrEmpty(account2Inp.text)) return;
+        if (account1Inp.text.ToString().Contains("Tap")) return;
+        if (account2Inp.text.ToString().Contains("Tap")) return;
 
-        if (string.IsNullOrEmpty(categoryInp.text)) return;
-        if (string.IsNullOrEmpty(amountInp.text)) return;
-        if (MoneyManager._instance.transactionPanel.transactionTypeButtonPanel.transactionTypeSelected == TransactionType.expense)
+        if (categoryInp.text.ToString().Contains("Tap")) return;
+        if (MoneyManager._instance.transactionPanel.transactionTypeButtonPanel.transactionTypeSelected == TransactionType.transfer)
         {
 
             Transfer transfer = new Transfer(DateTime.ParseExact(dateInp.text, "dd-MMM-yy", CultureInfo.InvariantCulture), float.Parse(amountInp.text), account1Inp.text,account2Inp.text, noteInp.text, descriptionInp.text);
@@ -88,7 +86,7 @@ public class TransactionPanelTransfer : MonoBehaviour
         List<string> categories = new List<string>();
                  if (MoneyManager._instance.transactionPanel.transactionTypeButtonPanel.transactionTypeSelected == TransactionType.transfer)
         {
-            categories.AddRange(MoneyManager._instance.moneyData.categories.FindAll(x => x.transactionType == TransactionType.expense).Select(m => m.categoryName));
+            categories.AddRange(MoneyManager._instance.moneyData.categories.FindAll(x => x.transactionType == TransactionType.transfer).Select(m => m.categoryName));
 
         }
         choosingPanel.Referesh(categories, text, text.GetComponentInParent<Image>());

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class MoneyManager : MonoBehaviour
@@ -46,6 +47,7 @@ public class MoneyData
 {
     public List<Account> accounts = new();
        public List<Category> categories = new();
+    public List<Transaction> allTransactions = new();
     public MoneyData()
     {
         accounts.Add(new Account("Cash", 0));
@@ -78,23 +80,21 @@ public class MoneyData
     public void AddTransaction(Transaction transaction)
     {
         GetAccount(transaction.account1).AddTransaction(transaction);
-        
+        allTransactions.Add(transaction);
 
         if (transaction.transactionType == TransactionType.transfer)
         {
             GetAccount(transaction.account2).AddTransaction(transaction);
 
         }
+        
+        
         MoneyManager._instance.SaveData();
     }
+
     public List<string> GetAllAccountsName()
     {
-        List<String> accountsName = new();
-        foreach (var item in accounts)
-        {
-            accountsName.Add(item.name);
-        }
-        return accountsName;
+               return accounts.Select(x=>x.name).ToList();
     }
     
 }
@@ -147,6 +147,7 @@ public class Account
 
 public class Transaction
 {
+    public int id;
    public DateTime date;
     public float amount;
     public string account1;
@@ -154,14 +155,18 @@ public class Transaction
 
     public string note, description;
     public TransactionType transactionType;
-   
+
+    public Transaction()
+    {
+        id = MoneyManager._instance.moneyData.allTransactions.Count + 1;
+    }
 }
 [System.Serializable]
 
 public class Expense : Transaction
 {
 
-    public Expense(DateTime date,float amount,string account,string note,string description)
+    public Expense(DateTime date, float amount, string account, string note, string description) 
     {
         this.date = date;
         transactionType = TransactionType.expense;
@@ -202,7 +207,7 @@ public class Transfer : Transaction
 }
 public enum TransactionType
 {
-    expense,income,transfer
+    income,expense,transfer
 }
 [System.Serializable]
 public class Category
